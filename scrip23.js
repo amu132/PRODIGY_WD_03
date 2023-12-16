@@ -21,39 +21,34 @@ const winningConditions = [
     [2, 4, 6]
 ];
 
-function handleCellPlayed(clickedCell, clickedCellIndex) {
+function handleCellPlayed(clickedCell, clickedCellIndex, callback) {
     gameState[clickedCellIndex] = currentPlayer;
     clickedCell.innerHTML = currentPlayer;
+
+    if (callback) {
+        callback();
+    }
 }
 
-function handlePlayerChange() {
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    statusDisplay.innerHTML = currentPlayerTurn();
+function checkWin() {
+    for (let condition of winningConditions) {
+        const [a, b, c] = condition;
+        if (gameState[a] === currentPlayer && gameState[b] === currentPlayer && gameState[c] === currentPlayer) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function handleResultValidation() {
-    let roundWon = false;
-    for(let i = 0; i <= 7; i++) {
-        const winCondition = winningConditions[i];
-        const a = gameState[winCondition[0]];
-        const b = gameState[winCondition[1]];
-        const c = gameState[winCondition[2]];
-        if(a === '' || b === '' || c === '')
-            continue;
-        if(a === b && b === c) {
-            roundWon = true;
-            break
-        }
-    }
-
-    if(roundWon) {
+    if (checkWin()) {
         statusDisplay.innerHTML = winningMessage();
         gameActive = false;
         return;
     }
 
     const roundDraw = !gameState.includes("");
-    if(roundDraw) {
+    if (roundDraw) {
         statusDisplay.innerHTML = drawMessage();
         gameActive = false;
         return;
@@ -62,15 +57,56 @@ function handleResultValidation() {
     handlePlayerChange();
 }
 
+function handlePlayerChange() {
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+    statusDisplay.innerHTML = currentPlayerTurn();
+
+    // AI's move after the user's move
+    setTimeout(handleAIMove, 10000); // Adjust the delay as needed
+}
+
+function getRandomEmptyCell() {
+    const emptyCells = gameState.reduce((acc, cell, index) => {
+        if (cell === "") {
+            acc.push(index);
+        }
+        return acc;
+    }, []);
+
+    if (emptyCells.length === 0) {
+        return null; // No empty cells
+    }
+
+    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+    return emptyCells[randomIndex];
+}
+
+function handleAIMove() {
+    if (!gameActive) {
+        return;
+    }
+
+    const emptyCellIndex = getRandomEmptyCell();
+
+    if (emptyCellIndex !== null) {
+        const emptyCell = document.querySelector(`[data-cell-index="${emptyCellIndex}"]`);
+
+        // Pass a callback to handleResultValidation
+        handleCellPlayed(emptyCell, emptyCellIndex, handleResultValidation);
+    }
+}
+
 function handleCellClick(clickedCellEvent) {
+    // Human player's move
     const clickedCell = clickedCellEvent.target;
     const clickedCellIndex = parseInt(clickedCell.getAttribute('data-cell-index'));
 
-    if(gameState[clickedCellIndex] !== "" || !gameActive)
+    if (gameState[clickedCellIndex] !== "" || !gameActive) {
         return;
+    }
 
-    handleCellPlayed(clickedCell, clickedCellIndex);
-    handleResultValidation();
+    // Pass a callback to handleResultValidation
+    handleCellPlayed(clickedCell, clickedCellIndex, handleResultValidation);
 }
 
 function handleRestartGame() {
@@ -80,7 +116,6 @@ function handleRestartGame() {
     statusDisplay.innerHTML = currentPlayerTurn();
     document.querySelectorAll('.cell').forEach(cell => cell.innerHTML = "");
 }
-
 
 document.querySelectorAll('.cell').forEach(cell => cell.addEventListener('click', handleCellClick));
 document.querySelector('.game--restart').addEventListener('click', handleRestartGame);
