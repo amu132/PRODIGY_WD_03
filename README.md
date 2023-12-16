@@ -1,37 +1,44 @@
 Tic Tac Toe Game
+This is a simple implementation of the classic Tic Tac Toe game using HTML, CSS, and JavaScript.
+
+Table of Contents
+Introduction
+Features
+How to Play
+Code Structure
+Customization
+License
 
 
-This is a simple implementation of a Tic Tac Toe game using HTML, CSS, and JavaScript. The game allows two players to take turns placing their markers ('X' or 'O') on a 3x3 grid. The game ends when one player wins by forming a line of three consecutive markers or when the entire grid is filled, resulting in a draw.
+Introduction
 
-Usage
-To use the Tic Tac Toe game:
+Tic Tac Toe is a two-player game where each player takes turns marking a cell in a 3x3 grid. The objective is to have three of their symbols (either "X" or "O") in a row, either horizontally, vertically, or diagonally.
 
-Open the index.html file in a web browser.
 
-Click on the cells to make your moves.
+Features
 
-The game status will be displayed at the top, indicating whose turn it is or if the game has ended.
+Two-player game: Play against a friend.
+Simple AI opponent: The game includes a basic AI that makes random moves.
+Responsive design: Playable on various devices.
 
-Game Rules
 
-Players take turns placing their markers on an empty cell.
-The game ends when one player forms a line of three consecutive markers horizontally, vertically, or diagonally.
-If the entire grid is filled without a winner, the game ends in a draw.
+How to Play
+
+Open the index.html file in your web browser.
+Click on any empty cell to make a move.
+The game alternates between "X" and "O" turns.
+The game ends when a player wins or it is a draw.
+Click the "Restart" button to start a new game.
 
 Code Structure
 
-index.html: The HTML file containing the structure of the game.
-style.css: The CSS file for styling the game.
-script.js: The JavaScript file containing the game logic.
+HTML (index.html): Defines the structure of the game board and UI elements.
+CSS (style.css): Provides styling for the game elements.
+JavaScript (script.js): Implements the game logic, including player moves, AI moves, and result validation.
 
-Functions
+Customization
 
-handleCellPlayed: Updates the game state and the display when a cell is clicked.
-handlePlayerChange: Switches the current player after a move.
-handleResultValidation: Checks for a winner or a draw after each move.
-handleCellClick: Event handler for cell clicks, invoking the above functions.
-handleRestartGame: Resets the game to its initial state.
-
-License
-
-This project is licensed under @amoghgaikwad 
+Feel free to customize the game to suit your preferences:
+Adjust the delay for the AI move in the handleAIMove function (in milliseconds).
+Modify the styling in the style.css file to change the appearance of the game.
+Explore additional features or improvements based on your programming skills.
